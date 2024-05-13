@@ -1,0 +1,55 @@
+name: CICD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+permissions:
+  id-token: write
+  pages: write
+  contents: read
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      # Create CSV file
+      - name: Create CSV file
+        run: |
+          echo "Name, Age" > profile.csv
+          echo "John, 30" >> profile.csv
+          echo "Jane, 25" >> profile.csv
+      
+      # Create JSON file
+      - name: Create JSON file
+        run: |
+          echo '[{"name": "John", "age": 30},{"name": "Jane", "age": 25}]' > data.json
+      
+      # Run unit tests (Replace this with your actual test command)
+      - name: Run unit tests
+        run: echo "Run your unit tests here"
+      
+      - name: Copy to dist
+        run: |
+          mkdir dist
+          cp index.html dist/index.html
+          cp data.json dist/data.json
+          cp script.js dist/script.js
+          cp profile.csv dist/profile.csv
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
+      
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_folder: dist
