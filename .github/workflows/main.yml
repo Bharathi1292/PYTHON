@@ -8,47 +8,33 @@ on:
 permissions:
   id-token: write
   pages: write
-  contents: read
   
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest    
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:    
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      
-      # Create CSV file
-      - name: Create CSV file
-        run: |
-          echo "Name, Age" > profile.csv
-          echo "John, 30" >> profile.csv
-          echo "Jane, 25" >> profile.csv
-      
-      # Create JSON file
-      - name: Create JSON file
-        run: |
-          echo '[{"name": "John", "age": 30},{"name": "Jane", "age": 25}]' > data.json
-      
-      # Run unit tests (Replace this with your actual test command)
-      - name: Run unit tests
-        run: echo "Run your unit tests here"
-      
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: echo Hello, world!      
+      # lägg till create csv file (glöm inte pip install)
+      # lägg till Create JSON file
+      # Köra ehnetstester      
       - name: Copy to dist
         run: |
           mkdir dist
           cp index.html dist/index.html
           cp data.json dist/data.json
-          cp script.js dist/script.js
-          cp profile.csv dist/profile.csv
-      
+          cp script.js dist/script.js      
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
-          name: dist
-          path: dist
-      
+          path: 'dist'
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
-        
