@@ -32,7 +32,8 @@ jobs:
           mkdir dist
           cp index.html dist/index.html
           cp data.json dist/data.json
-          cp script.js dist/script.js      
+          cp script.js dist/script.js  
+          cp profiles.csv/profiles.csv    
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
@@ -42,3 +43,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+       
