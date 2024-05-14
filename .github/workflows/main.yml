@@ -25,7 +25,9 @@ jobs:
         run: python generate.py
       - name: create JSON file
         run: python csvtojson.py
-            
+      - name: unittest
+        run: pytest  test.py
+
       # lägg till create csv file (glöm inte pip install)
       # lägg till Create JSON file
       # Köra enhetstester      
