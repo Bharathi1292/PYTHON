@@ -1,0 +1,57 @@
+name: CICD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  id-token: write
+  pages: write
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Run a one-line script
+        run: echo Hello, world!      
+
+      # Copy the existing profile.csv file to the dist directory
+      - name: Copy profile.csv to dist
+        run: cp profile.csv dist/
+      
+      # Add steps to create JSON file, run unit tests, etc.
+      - name: Create JSON file
+        run: |
+          echo '[{"name": "John", "age": 30},{"name": "Jane", "age": 25}]' > data.json
+      
+      - name: Run unit tests
+        run: |
+          # Command to run unit tests goes here
+
+      - name: Copy other files to dist
+        run: |
+          mkdir dist
+          cp index.html dist/index.html
+          cp script.js dist/script.js
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: dist
