@@ -26,7 +26,7 @@ jobs:
       - name: create JSON file
         run: python csvtojson.py
       - name: unittest
-        run: pytest  PythonFiles/test.py
+        run: pytest test.py
 
       # lägg till create csv file (glöm inte pip install)
       # lägg till Create JSON file
