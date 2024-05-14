@@ -32,7 +32,7 @@ def test_csv_rows():
 # Test to verify JSON file contains all required properties
 def test_json_properties():
     data = read_json('data.json')
-    assert all(key in data[0] for key in ['firstname', 'lastname', 'address', 'city', 'country', 'zipcode', 'countrycode', 'nationalid', 'telephonecountrcode', 'telephonenumber', 'birthday', 'contesttocontract'])
+    assert all(key in data[0] for key in ['Givenname', 'Surname', 'Streetaddress', 'City',  'Zipcode', 'Country','CountryCode', 'NationalId', 'TelephoneCountryCode', 'Telephone', 'Birthday', 'ConsentToContact'])
 
 # Test to verify JSON file contains 900+ rows
 def test_json_rows():
