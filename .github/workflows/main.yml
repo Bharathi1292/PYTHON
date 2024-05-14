@@ -1,54 +1,39 @@
-name: CICD
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-permissions:
-  id-token: write
-  pages: write
-  contents: read
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Run a one-line script
-        run: echo Hello, world!  
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: create python file
-        run: python generate.py    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
 
-      # Copy the existing profile.csv file to the dist directory
-      - name: Copy profile.csv to dist
-        run: cp profile.csv dist/
-      
-      # Add steps to create JSON file, run unit tests, etc.
-      - name: Create JSON file
-        run: |
-          echo '[{"name": "John", "age": 30},{"name": "Jane", "age": 25}]' > data.json
+    - name: Install faker
+      run: pip install faker
 
-      - name: Copy to dist
-        run: |
-          mkdir dist
-          cp data.json dist/data.json
-          cp index.html dist/index.html
-          cp script.js dist/script.js
-      
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          path: dist
-      
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+    - name: Generate CSV
+      run: python generate.py
+
+    - name: Convert CSV to JSON
+      run: python csvtojson.py
+
+    - name: Run unit tests
+      run: pytest
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: .
+        publish_branch: gh-pages
        
