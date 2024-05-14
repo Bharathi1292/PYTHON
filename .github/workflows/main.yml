@@ -20,7 +20,12 @@ jobs:
       - uses: actions/checkout@v3
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo Hello, world!      
+        run: echo Hello, world!  
+      - name: create csv file
+        run: python generate.py
+      - name: create JSON file
+        run: python csvtojson.py
+            
       # lägg till create csv file (glöm inte pip install)
       # lägg till Create JSON file
       # Köra enhetstester      
