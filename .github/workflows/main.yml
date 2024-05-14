@@ -5,24 +5,56 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+
 permissions:
   id-token: write
   pages: write
   contents: read
-  
+
 jobs:
   build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest    
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:    
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    runs-on: ubuntu-latest
+    
+    steps:
       - uses: actions/checkout@v3
-      # Runs a single command using the runners shell
+      
       - name: Run a one-line script
-        run: echo Hello, world!    
-      - name: Create a file
-        run: python generate.py
-      - name: create csv file
-        run:   
+        run: echo Hello, world!      
+
+      - name: Create CSV file
+        run: |
+          echo "Name, Age" > profiles.csv
+          cat data.txt >> profiles.csv
+      
+      # Add steps to create JSON file, run unit tests, etc.
+      - name: Create JSON file
+        run: |
+          echo '[{"name": "John", "age": 30},{"name": "Jane", "age": 25}]' > data.json
+      
+      - name: Run unit tests
+        run: python calculateTests.py
+          # Command to run unit tests goes here
+
+      - name: Copy to dist
+        run: |
+          mkdir dist
+          cp index.html dist/index.html
+          cp data.json dist/data.json
+          cp script.js dist/script.js
+          cp profiles.csv dist/profiles.csv
+      
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist
+          path: dist
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+       
+
 
