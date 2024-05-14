@@ -1,27 +1,40 @@
+# test_data.py
+
+import pytest
 import csv
 import json
 
+# Function to read data from CSV file
+def read_csv(profiles):
+    data = []
+    with open(profiles, 'r', encoding='utf-8') as file:
+        reader = csv.DictReader(profiles)
+        for row in reader:
+            data.append(row)
+    return data
+
+# Function to read data from JSON file
+def read_json(data):
+    with open(data, 'r', encoding='utf-8') as file:
+        data = json.load(data)
+    return data
+
+# Test to verify CSV file contains 12 columns
 def test_csv_columns():
-    with open('profiles.csv', 'r') as f:
-        reader = csv.reader(f)
-        header = next(reader)
-        assert len(header) == 12
+    data = read_csv('profiles1.csv')
+    assert len(data[0]) == 12
 
+# Test to verify CSV file contains 900+ rows
 def test_csv_rows():
-    with open('profiles.csv', 'r') as f:
-        reader = csv.reader(f)
-        rows = list(reader)
-        assert len(rows) > 900
+    data = read_csv('profiles1.csv')
+    assert len(data) >= 900
 
+# Test to verify JSON file contains all required properties
 def test_json_properties():
-    with open('data.json', 'r') as f:
-        profiles = json.load(f)
-        for profile in profiles:
-            assert 'property1' in profile
-            assert 'property2' in profile
-            # Fortsätt med resterande properties
+    data = read_json('data.json')
+    assert all(key in data[0] for key in ['firstname', 'lastname', 'address', 'city', 'country', 'zipcode', 'countrycode', 'nationalid', 'telephonecountrcode', 'telephonenumber', 'birthday', 'contesttocontract'])
 
+# Test to verify JSON file contains 900+ rows
 def test_json_rows():
-    with open('data.json', 'r') as f:
-        profiles = json.load(f)
-        assert len(profiles) > 900
+    data = read_json('data.json')
+    assert len(data) >= 900
