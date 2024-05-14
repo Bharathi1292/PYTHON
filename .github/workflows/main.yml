@@ -19,7 +19,10 @@ jobs:
       - uses: actions/checkout@v3
       
       - name: Run a one-line script
-        run: echo Hello, world!      
+        run: echo Hello, world!  
+
+      - name: create python file
+        run: python generate.py    
 
       # Copy the existing profile.csv file to the dist directory
       - name: Copy profile.csv to dist
@@ -29,14 +32,11 @@ jobs:
       - name: Create JSON file
         run: |
           echo '[{"name": "John", "age": 30},{"name": "Jane", "age": 25}]' > data.json
-      
-      - name: Run unit tests
-        run: |
-          # Command to run unit tests goes here
 
-      - name: Copy other files to dist
+      - name: Copy to dist
         run: |
           mkdir dist
+          cp data.json dist/data.json
           cp index.html dist/index.html
           cp script.js dist/script.js
       
@@ -44,9 +44,8 @@ jobs:
         uses: actions/configure-pages@v5
       
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: dist
           path: dist
       
       - name: Deploy to GitHub Pages
